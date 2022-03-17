@@ -29,6 +29,7 @@ create table coffeeshop.OutboxEvent (
                              aggregateid varchar(255) not null,
                              type varchar(255) not null,
                              timestamp timestamp not null,
+                             tracingspancontext varchar(255),
                              payload varchar(8000),
                              primary key (id)
 );
