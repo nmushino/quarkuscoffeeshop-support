@@ -31,6 +31,7 @@ create table coffeeshop.OutboxEvent (
                              aggregateid varchar(255) not null,
                              type varchar(255) not null,
                              timestamp timestamp not null,
+                             tracingspancontext varchar(255),
                              payload varchar(8000),
                              tracingspancontext varchar(256),
                              primary key (id)
