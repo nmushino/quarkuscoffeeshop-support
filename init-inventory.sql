@@ -1,5 +1,5 @@
 DROP SCHEMA IF EXISTS inventory CASCADE;
-CREATE SCHEMA inventory AUTHORIZATION coffeeshopuser;
+CREATE SCHEMA inventory AUTHORIZATION robotshopuser;
 create sequence inventory.hibernate_sequence start 1 increment 1;
 create table inventory.Inventory (
                                      id int8 not null,
