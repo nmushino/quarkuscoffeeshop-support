@@ -33,6 +33,8 @@ services:
       - "2181:2181"
     environment:
       LOG_DIR: /tmp/logs
+    networks: 
+      - kafka_network
 
   kafka:
     image: quay.io/strimzi/kafka:0.39.0-kafka-3.6.1
@@ -53,7 +55,8 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"      
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "storage-topic:1:1:compact,global-id-topic:1:1:compact,input-topic:1:1:compact,logx-topic:1:1:compact,dbx-topic:1:1:compact"
+    networks: 
+      - kafka_network
 
   kafka-ui:
     container_name: kafka-ui
@@ -68,16 +71,8 @@ services:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
       KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
-
-  kafdrop:
-    image: obsidiandynamics/kafdrop:latest
-    restart: always
-    environment:
-      KAFKA_BROKERCONNECT: "kafka:29092"
-    ports:
-      - 9000:9000
-    depends_on:
-      - kafka
+    networks: 
+      - kafka_network
 
 #  registry:
 #    image: apicurio/apicurio-registry-mem
@@ -88,6 +83,15 @@ services:
 #      APPLICATION_ID: registry_id
 #      APPLICATION_SERVER: localhost:9000
 
+#networks:
+#  my-network:
+#    name: robotshop-network
+
 networks:
-  my-network:
-    name: robotshop-network
+  kafka_network:
+    name: kafka_docker_net
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.10.0/24
